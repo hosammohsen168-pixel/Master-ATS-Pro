@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FMCG ATS Pro | فاحص توافق السيرة الذاتية الذكي</title>
+    <!-- خط كايرو من جوجل -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- مكتبة Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- مكتبة الأيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Cairo', 'sans-serif'] },
+                    colors: {
+                        brand: { 50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 900: '#312e81' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(226, 232, 240, 0.8); }
+        .gradient-header { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%); }
+        .pulse-btn { animation: pulse-shadow 2s infinite; }
+        @keyframes pulse-shadow {
+            0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.5); }
+            70% { box-shadow: 0 0 0 12px rgba(79, 70, 229, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 1s ease-in-out, stroke 0.5s ease;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        /* تخصيص شريط التمرير */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- الهيدر العلوي -->
+    <header class="gradient-header text-white py-8 px-4 shadow-lg border-b-4 border-indigo-500">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="bg-white/10 p-3.5 rounded-2xl border border-white/20 backdrop-blur-sm">
+                    <i class="fa-solid fa-Microchip-ai text-3xl text-indigo-300 fa-robot"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-2xl md:text-3xl font-black tracking-wide">FMCG ATS Matcher <span class="bg-amber-400 text-slate-900 text-xs px-2.5 py-1 rounded-full font-extrabold uppercase align-middle">PRO</span></h1>
+                    </div>
+                    <p class="text-indigo-200 text-sm md:text-base mt-1">المحرك الذكي لفحص وتطابق السير الذاتية لقطاع السلع الاستهلاكية والمبيعات والإمداد</p>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-2 text-xs font-bold">
+                <span class="bg-white/10 px-3 py-1.5 rounded-lg border border-white/15"><i class="fa-solid fa-truck-fast ml-1 text-amber-400"></i> مناديب المبيعات</span>
+                <span class="bg-white/10 px-3 py-1.5 rounded-lg border border-white/15"><i class="fa-solid fa-store ml-1 text-emerald-400"></i> المنسقين والمروجين</span>
+                <span class="bg-white/10 px-3 py-1.5 rounded-lg border border-white/15"><i class="fa-solid fa-calculator ml-1 text-sky-400"></i> المحاسبين</span>
+                <span class="bg-white/10 px-3 py-1.5 rounded-lg border border-white/15"><i class="fa-solid fa-flask-vial ml-1 text-rose-400"></i> مراقبة الجودة</span>
+                <span class="bg-white/10 px-3 py-1.5 rounded-lg border border-white/15"><i class="fa-solid fa-boxes-stacked ml-1 text-purple-400"></i> المخازن واللوجستيات</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="max-w-7xl mx-auto w-full px-4 py-8 flex-grow">
+        
+        <!-- شريط التجربة السريعة (Presets) -->
+        <div class="glass-card rounded-2xl p-4 mb-8 shadow-sm">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-2 text-sm font-bold text-slate-700">
+                    <i class="fa-solid fa-wand-magic-sparkles text-indigo-600 text-lg"></i>
+                    <span>تجربة فورية بنقرة واحدة (أمثلة عملية بها نواقص لاختبار قوة المحرك):</span>
+                </div>
+                <div class="flex flex-wrap gap-2 w-full sm:w-auto">
+                    <button onclick="loadPreset('sales')" class="text-xs font-bold bg-indigo-50 hover:bg-indigo-600 hover:text-white text-indigo-700 px-3 py-2 rounded-xl transition border border-indigo-200 flex items-center gap-1.5">
+                        <i class="fa-solid fa-route"></i> مندوب مبيعات (Sales)
+                    </button>
+                    <button onclick="loadPreset('merchandiser')" class="text-xs font-bold bg-emerald-50 hover:bg-emerald-600 hover:text-white text-emerald-700 px-3 py-2 rounded-xl transition border border-emerald-200 flex items-center gap-1.5">
+                        <i class="fa-solid fa-tags"></i> منسق ممرات (Merchandiser)
+                    </button>
+                    <button onclick="loadPreset('accountant')" class="text-xs font-bold bg-sky-50 hover:bg-sky-600 hover:text-white text-sky-700 px-3 py-2 rounded-xl transition border border-sky-200 flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-invoice-dollar"></i> محاسب فروع
+                    </button>
+                    <button onclick="loadPreset('quality')" class="text-xs font-bold bg-rose-50 hover:bg-rose-600 hover:text-white text-rose-700 px-3 py-2 rounded-xl transition border border-rose-200 flex items-center gap-1.5">
+                        <i class="fa-solid fa-clipboard-check"></i> مراقب جودة (QC)
+                    </button>
+                    <button onclick="loadPreset('warehouse')" class="text-xs font-bold bg-purple-50 hover:bg-purple-600 hover:text-white text-purple-700 px-3 py-2 rounded-xl transition border border-purple-200 flex items-center gap-1.5">
+                        <i class="fa-solid fa-warehouse"></i> مشرف مخازن
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. شاشة المدخلات -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- الصندوق الأول: السيرة الذاتية -->
+            <div class="glass-card rounded-2xl p-5 shadow-sm flex flex-col">
+                <div class="flex items-center justify-between mb-3">
+                    <label for="resumeText" class="font-extrabold text-slate-800 flex items-center gap-2 text-base">
+                        <span class="bg-indigo-100 text-indigo-700 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fa-solid fa-file-user"></i></span>
+                        نص السيرة الذاتية (Resume Text)
+                    </label>
+                    <div class="flex items-center gap-3">
+                        <span id="resumeWordCount" class="text-xs text-slate-400 font-semibold">0 كلمة</span>
+                        <button onclick="clearInput('resumeText')" class="text-xs text-rose-500 hover:text-rose-700 font-bold"><i class="fa-solid fa-trash-can ml-1"></i>مسح</button>
+                    </div>
+                </div>
+                <textarea id="resumeText" rows="10" oninput="updateCount('resumeText', 'resumeWordCount')"
+                    placeholder="الصق نص سيرتك الذاتية هنا (بالعربية أو الإنجليزية)...&#10;مثال: خبرة 3 سنوات كمندوب مبيعات كاش فان، تحقيق التارجت، متابعة العملاء والتحصيل..."
+                    class="w-full p-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-sm leading-relaxed resize-y flex-grow"></textarea>
+            </div>
+
+            <!-- الصندوق الثاني: إعلان الوظيفة -->
+            <div class="glass-card rounded-2xl p-5 shadow-sm flex flex-col">
+                <div class="flex items-center justify-between mb-3">
+                    <label for="jobText" class="font-extrabold text-slate-800 flex items-center gap-2 text-base">
+                        <span class="bg-amber-100 text-amber-700 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fa-solid fa-bullhorn"></i></span>
+                        إعلان الوظيفة والشروط (Job Description)
+                    </label>
+                    <div class="flex items-center gap-3">
+                        <span id="jobWordCount" class="text-xs text-slate-400 font-semibold">0 كلمة</span>
+                        <button onclick="clearInput('jobText')" class="text-xs text-rose-500 hover:text-rose-700 font-bold"><i class="fa-solid fa-trash-can ml-1"></i>مسح</button>
+                    </div>
+                </div>
+                <textarea id="jobText" rows="10" oninput="updateCount('jobText', 'jobWordCount')"
+                    placeholder="الصق نص إعلان الوظيفة المطلوب التقديم عليها هنا...&#10;مثال: مطلوب مندوب مبيعات تجزئة وجملة، خبرة في خطوط السير وفتح عملاء جدد وتطبيق FIFO..."
+                    class="w-full p-4 rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-sm leading-relaxed resize-y flex-grow"></textarea>
+            </div>
+        </div>
+
+        <!-- زر الفحص البارز والمتحرك -->
+        <div class="text-center mb-10">
+            <button onclick="analyzeATS()" class="pulse-btn bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 hover:from-indigo-700 hover:to-purple-800 text-white font-black text-lg px-10 py-4 rounded-2xl shadow-xl transform hover:-translate-y-0.5 transition duration-200 inline-flex items-center gap-3">
+                <i class="fa-solid fa-magnifying-glass-chart text-xl"></i>
+                <span>🔍 افحص التوافق واستخرج الكلمات الناقصة وأوجه القصور</span>
+            </button>
+        </div>
+
+        <!-- قسم النتائج (مخفي افتراضياً ويظهر عند الفحص) -->
+        <div id="resultsSection" class="hidden space-y-8">
+            
+            <!-- 2. لوحة النتيجة والمؤشرات الإحصائية -->
+            <div class="glass-card rounded-3xl p-6 md:p-8 shadow-md border-t-4 border-indigo-600">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                    
+                    <!-- الدائرة الإحصائية -->
+                    <div class="flex flex-col items-center justify-center text-center border-b lg:border-b-0 lg:border-l border-slate-200 pb-6 lg:pb-0 lg:pl-6">
+                        <div class="relative w-44 h-44 flex items-center justify-center">
+                            <svg class="w-full h-full" viewBox="0 0 120 120">
+                                <circle class="text-slate-100" stroke-width="10" stroke="currentColor" fill="transparent" r="50" cx="60" cy="60"/>
+                                <circle id="scoreCircle" class="progress-ring__circle" stroke-width="10" stroke-linecap="round" stroke="#4f46e5" fill="transparent" r="50" cx="60" cy="60" stroke-dasharray="314.16" stroke-dashoffset="314.16"/>
+                            </svg>
+                            <div class="absolute flex flex-col items-center">
+                                <span id="scoreValue" class="text-4xl font-black text-slate-800">0%</span>
+                                <span id="scoreBadge" class="text-xs font-extrabold px-2.5 py-0.5 rounded-full mt-1">قيد الفحص</span>
+                            </div>
+                        </div>
+                        <h3 id="scoreVerdict" class="font-extrabold text-lg mt-3 text-slate-800">تحليل التوافق العام</h3>
+                        <p id="detectedCategory" class="text-xs text-indigo-600 font-bold mt-1 bg-indigo-50 px-3 py-1 rounded-lg"></p>
+                    </div>
+
+                    <!-- المؤشرات الفرعية -->
+                    <div class="lg:col-span-2 space-y-5">
+                        <h4 class="font-extrabold text-slate-800 text-base flex items-center gap-2">
+                            <i class="fa-solid fa-chart-pie text-indigo-600"></i> تفاصيل التقييم الفني للسيرة الذاتية:
+                        </h4>
+                        
+                        <!-- مؤشر 1 -->
+                        <div>
+                            <div class="flex justify-between text-xs font-bold mb-1.5">
+                                <span class="text-slate-700">تطابق المهارات والمصطلحات التخصصية (FMCG & Hard Skills)</span>
+                                <span id="fmcgScoreText" class="text-indigo-700">0%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                                <div id="fmcgScoreBar" class="bg-indigo-600 h-3 rounded-full transition-all duration-700" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- مؤشر 2 -->
+                        <div>
+                            <div class="flex justify-between text-xs font-bold mb-1.5">
+                                <span class="text-slate-700">تطابق الكلمات السياقية ومتطلبات الإعلان (Context Match)</span>
+                                <span id="contextScoreText" class="text-sky-700">0%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                                <div id="contextScoreBar" class="bg-sky-500 h-3 rounded-full transition-all duration-700" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- مؤشر 3 -->
+                        <div>
+                            <div class="flex justify-between text-xs font-bold mb-1.5">
+                                <span class="text-slate-700">قوة الصياغة والأرقام القياسية (Impact & Metrics Readiness)</span>
+                                <span id="formatScoreText" class="text-emerald-700">0%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                                <div id="formatScoreBar" class="bg-emerald-500 h-3 rounded-full transition-all duration-700" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs text-slate-600 leading-relaxed flex items-start gap-2.5">
+                            <i class="fa-solid fa-circle-info text-indigo-600 text-base mt-0.5"></i>
+                            <div>
+                                <strong>نصيحة مهندس الـ ATS:</strong> أنظمة الفرز الآلي ترفض السير الذاتية التي تقل نسبة تطابقها عن <strong>75%</strong>، أو التي تخلو من المصطلحات الإنجليزية الدارجة في السوق (مثل <span class="font-mono font-bold text-slate-800">FIFO, Planogram, Cash Van, ERP, KPIs</span>) حتى لو كانت السيرة الذاتية باللغة العربية.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. بطاقات التحليل الفوري (الكلمات المفقودة + المكتشفة) -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                <!-- الكلمات المفتاحية المفقودة -->
+                <div class="glass-card rounded-2xl p-6 shadow-sm border-r-4 border-rose-500">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-extrabold text-rose-700 text-lg flex items-center gap-2">
+                            <i class="fa-solid fa-triangle-exclamation"></i> الكلمات المفتاحية المفقودة (Missing Keywords)
+                        </h3>
+                        <span id="missingCountBadge" class="bg-rose-100 text-rose-800 text-xs font-black px-3 py-1 rounded-full">0 مفقودة</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-4">هذه المهارات والكلمات وردت في إعلان الوظيفة ولكنها <strong>غائبة تماماً</strong> عن سيرتك الذاتية. إضافتها ترفع نسبة قبولك فوراً:</p>
+                    <div id="missingKeywordsContainer" class="flex flex-wrap gap-2"></div>
+                </div>
+
+                <!-- الكلمات المفتاحية المتطابقة -->
+                <div class="glass-card rounded-2xl p-6 shadow-sm border-r-4 border-emerald-500">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-extrabold text-emerald-700 text-lg flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check"></i> نقاط القوة والكلمات المتطابقة (Matched Skills)
+                        </h3>
+                        <span id="matchedCountBadge" class="bg-emerald-100 text-emerald-800 text-xs font-black px-3 py-1 rounded-full">0 متطابقة</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-4">الكلمات والمهارات التي نجح المحرك في رصدها داخل سيرتك الذاتية وتتطابق مع شروط الوظيفة:</p>
+                    <div id="matchedKeywordsContainer" class="flex flex-wrap gap-2"></div>
+                </div>
+            </div>
+
+            <!-- صائد المشاكل وأوجه القصور في الـ CV -->
+            <div class="glass-card rounded-2xl p-6 shadow-sm border-r-4 border-amber-500">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-extrabold text-slate-800 text-lg flex items-center gap-2">
+                        <i class="fa-solid fa-shield-virus text-amber-500 text-xl"></i> صائد المشاكل وكاشف القصور الصارم (ATS Deficiency Hunter)
+                    </h3>
+                    <span class="text-xs font-bold text-amber-700 bg-amber-50 px-3 py-1 rounded-lg border border-amber-200">فحص هيكلي ورقمي شامل</span>
+                </div>
+                <div id="alertsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            </div>
+
+            <!-- 4. خاصية التحسين السحري (برومبت Claude / ChatGPT) -->
+            <div class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-xl relative overflow-hidden">
+                <div class="relative z-10">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                        <div>
+                            <span class="bg-indigo-500/30 text-indigo-300 border border-indigo-400/30 text-xs font-bold px-3 py-1 rounded-full">✨ خاصية التحسين السحري بالذكاء الاصطناعي</span>
+                            <h3 class="text-xl md:text-2xl font-black mt-2 flex items-center gap-2">
+                                برومبت جاهز لإعادة صياغة الـ CV ودمج النواقص بذكاء
+                            </h3>
+                            <p class="text-indigo-200 text-xs md:text-sm mt-1">تم توليد هذا الأمر الهندسي خصيصاً بناءً على نتيجة فحصك؛ انسخه والصقه في <strong>Claude</strong> أو <strong>ChatGPT</strong> ليكتب لك سيرة ذاتية احترافية تتخطى الـ ATS بدون أي فبركة.</p>
+                        </div>
+                        <button onclick="copyMagicPrompt()" id="copyPromptBtn" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-black px-6 py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 shrink-0 text-sm">
+                            <i class="fa-solid fa-copy text-base"></i>
+                            <span>نسخ البرومبت السحري لـ Claude</span>
+                        </button>
+                    </div>
+                    <textarea id="magicPromptBox" readonly rows="8" class="w-full bg-slate-950/80 text-indigo-100 border border-indigo-500/30 rounded-xl p-4 text-xs font-mono leading-relaxed focus:outline-none"></textarea>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- الفوتر -->
+    <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 mt-12">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p class="font-bold text-slate-700">FMCG ATS Resume Matcher Pro — مصمم خصيصاً لقطاع المبيعات والتوزيع والسلع الاستهلاكية</p>
+            <p>جاهز للعمل المباشر على GitHub Pages | يعمل بالكامل داخل المتصفح بخصوصية 100%</p>
+        </div>
+    </footer>
+<script>
+        // ==========================================
+        // 1. قاموس مصطلحات قطاع الـ FMCG الشامل (ثنائي اللغة)
+        // ==========================================
+        const FMCG_DICTIONARY = [
+            // المبيعات والتوزيع (Sales & Distribution)
+            { canonical: "مبيعات الكاش فان (Cash Van / Van Sales)", category: "المبيعات والتوزيع", forms: ["كاش فان", "فان سيلز", "cash van", "van sales", "مبيعات نقديه", "سيارات التوزيع"] },
+            { canonical: "المبيعات الآجلة (Pre-Sales)", category: "المبيعات والتوزيع", forms: ["بري سيلز", "مبيعات اجله", "pre sales", "presales"] },
+            { canonical: "تغطية وخطوط السير (Routing & Journey Plan)", category: "المبيعات والتوزيع", forms: ["خط سير", "خطوط سير", "خطوط السير", "routing", "route plan", "journey plan", "تغطيه جغرافيه"] },
+            { canonical: "تحقيق المستهدف البيعي (Sales Target)", category: "المبيعات والتوزيع", forms: ["تارجت", "التارجت", "مستهدف", "المستهدف", "target", "sales target", "quota"] },
+            { canonical: "التحصيل النقدي والآجل (Collection)", category: "المبيعات والتوزيع", forms: ["تحصيل", "التحصيل", "مديونيات", "collection", "cash collection"] },
+            { canonical: "فتح عملاء وأسواق جديدة (New Accounts / Cold Calling)", category: "المبيعات والتوزيع", forms: ["عملاء جدد", "فتح عملاء", "اسواق جديده", "cold calling", "new accounts", "business development"] },
+            { canonical: "مبيعات التجزئة والجملة (Retail & Wholesale)", category: "المبيعات والتوزيع", forms: ["تجزئه", "جمله", "التجزئه", "الجمله", "retail", "wholesale", "traditional trade", "tt"] },
+            { canonical: "كبار العملاء والسلاسل (Key Accounts / Modern Trade)", category: "المبيعات والتوزيع", forms: ["كبار العملاء", "سلاسل تجاريه", "السلاسل", "هايبر", "key account", "modern trade", "mt", "ka", "hypermarket"] },
+            { canonical: "التوزيع العددي والوزني (Numeric & Weighted Distribution)", category: "المبيعات والتوزيع", forms: ["توزيع عددي", "توزيع وزني", "numeric distribution", "weighted distribution", "coverage"] },
+            { canonical: "قطاع الهوريكا (HORECA)", category: "المبيعات والتوزيع", forms: ["هوريكا", "فنادق ومطاعم", "horeca"] },
+
+            // التنسيق والترويج (Merchandising & Trade Marketing)
+            { canonical: "خطة عرض الأرفف (Planogram)", category: "التنسيق والترويج", forms: ["بلانوجرام", "البلانوجرام", "planogram", "تنظيم الارفف", "رص الارفف", "تنسيق الارفف"] },
+            { canonical: "حصة الرف والواجهة (Share of Shelf / Facing)", category: "التنسيق والترويج", forms: ["حصه الرف", "مساحه العرض", "share of shelf", "sos", "facing", "واجهات العرض"] },
+            { canonical: "مواد الدعاية في نقاط البيع (POSM)", category: "التنسيق والترويج", forms: ["بوسم", "مواد دعائيه", "نقاط البيع", "posm", "point of sale", "ستاندات"] },
+            { canonical: "العروض الترويجية (Promotions & Displays)", category: "التنسيق والترويج", forms: ["عروض ترويجيه", "تنشيط مبيعات", "ترويج", "promotion", "promotional", "display", "جندوله", "gondola"] },
+            { canonical: "متابعة نفاد المخزون (Out of Stock - OOS)", category: "التنسيق والترويج", forms: ["نواقص", "نفاد المخزون", "الرواكد", "oos", "out of stock", "stock availability"] },
+            { canonical: "فحص الأسعار والمنافسين (Price Audit & Competitors)", category: "التنسيق والترويج", forms: ["اسعار المنافسين", "متابعه الاسعار", "تسعير", "price check", "competitor analysis", "market intelligence"] },
+
+            // المحاسبة والمالية (Accounting & Finance)
+            { canonical: "حسابات العملاء وأعمار الديون (AR & Aging Report)", category: "المحاسبة والمالية", forms: ["حسابات عملاء", "اعمار الديون", "مديونيات العملاء", "accounts receivable", "aging report", "ar"] },
+            { canonical: "حسابات الموردين (Accounts Payable - AP)", category: "المحاسبة والمالية", forms: ["حسابات موردين", "الموردين", "accounts payable", "ap"] },
+            { canonical: "تسوية العهد والصندوق (Petty Cash & Clearance)", category: "المحاسبة والمالية", forms: ["عهد", "العهد", "تسويه عهد", "الخزينه", "الصندوق", "petty cash", "cash clearance"] },
+            { canonical: "مطابقة كشوف الحساب والبنوك (Reconciliation)", category: "المحاسبة والمالية", forms: ["مطابقه", "مطابقات", "تسويه بنكيه", "مذكرات تسويه", "reconciliation", "bank reconciliation"] },
+            { canonical: "الفاتورة الإلكترونية والضرائب (E-Invoice & VAT)", category: "المحاسبة والمالية", forms: ["فاتوره الكترونيه", "الفاتوره الالكترونيه", "ضريبه القيمه المضافه", "ضرائب", "vat", "e-invoice", "tax"] },
+            { canonical: "محاسبة التكاليف والمخزون (Cost & Inventory Accounting)", category: "المحاسبة والمالية", forms: ["تكاليف", "محاسبه تكاليف", "تقييم المخزون", "cost accounting", "cogs"] },
+            { canonical: "أنظمة تخطيط الموارد (ERP / SAP / Oracle / Odoo)", category: "المحاسبة والمالية", forms: ["erp", "sap", "ساب", "اوراكل", "oracle", "odoo", "اودو", "دفتره", "برامج محاسبيه"] },
+            { canonical: "الإكسل المتقدم والتحليل المالي (Advanced Excel)", category: "المحاسبة والمالية", forms: ["اكسل", "اكسيل", "excel", "vlookup", "pivot table", "باور كويري", "power query"] },
+
+            // مراقبة وتوكيد الجودة (Quality Control & Assurance)
+            { canonical: "نظام تحليل المخاطر (HACCP)", category: "مراقبة الجودة", forms: ["هاسب", "الهاسب", "haccp"] },
+            { canonical: "ممارسات التصنيع الجيد (GMP & GHP)", category: "مراقبة الجودة", forms: ["تصنيع جيد", "gmp", "ghp", "hygiene", "هايجين", "سلامه الغذاء", "food safety"] },
+            { canonical: "معايير الأيزو (ISO 22000 / ISO 9001)", category: "مراقبة الجودة", forms: ["ايزو", "الايزو", "iso", "iso 22000", "iso 9001"] },
+            { canonical: "فحص الخامات والمنتج النهائي (Raw Material & QC Inspection)", category: "مراقبة الجودة", forms: ["فحص ظاهري", "فحص خامات", "منتج نهائي", "سحب عينات", "quality control", "qc", "qa", "inspection"] },
+            { canonical: "إجراءات عدم المطابقة والتصحيح (Non-Conformance & CAPA)", category: "مراقبة الجودة", forms: ["عدم مطابقه", "اجراءات تصحيحيه", "capa", "non conformance", "ncr"] },
+            { canonical: "سلسلة التبريد ودرجات الحرارة (Cold Chain)", category: "مراقبة الجودة", forms: ["سلسله التبريد", "درجات الحراره", "التبريد", "cold chain", "temperature control"] },
+
+            // المخازن وسلاسل الإمداد (Warehousing & Supply Chain)
+            { canonical: "تطبيق الأول فالأول وتاريخ الصلاحية (FIFO / FEFO)", category: "المخازن والإمداد", forms: ["فيفو", "fifo", "fefo", "تواريخ الصلاحيه", "الصلاحيه", "الاكسباير", "expiry"] },
+            { canonical: "الجرد الدوري والسنوي (Stocktaking & Cycle Count)", category: "المخازن والإمداد", forms: ["جرد", "الجرد", "جرد دوري", "جرد مخزني", "stocktaking", "cycle count", "physical inventory"] },
+            { canonical: "نظام إدارة المستودعات (WMS & Barcode)", category: "المخازن والإمداد", forms: ["wms", "باركود", "barcode", "نظام المخازن", "كارت صنف", "bin card"] },
+            { canonical: "الاستلام والصرف والتحميل (Inbound / Outbound / Dispatch)", category: "المخازن والإمداد", forms: ["استلام وصرف", "اذون اضافه", "اذون صرف", "تحميل", "تعتيق", "dispatch", "inbound", "outbound", "receiving"] },
+            { canonical: "إدارة الأسطول والتشغيل اللوجستي (Fleet & Logistics)", category: "المخازن والإمداد", forms: ["لوجستيات", "اسطول", "حركه السيارات", "التوريد", "logistics", "supply chain", "fleet"] },
+            { canonical: "تقليل الهالك والتوالف (Shrinkage & Damage Control)", category: "المخازن والإمداد", forms: ["توالف", "التوالف", "هالك", "الهالك", "مرتجعات", "المرتجعات", "shrinkage", "damages", "returns"] },
+
+            // مهارات قياسية وإدارية مشتركة
+            { canonical: "مؤشرات الأداء الرئيسية (KPIs)", category: "مهارات قياسية", forms: ["مؤشرات الاداء", "kpi", "kpis"] },
+            { canonical: "كتابة التقارير اليومية والشهرية (Reporting)", category: "مهارات قياسية", forms: ["تقارير", "التقارير", "reporting", "daily report"] },
+            { canonical: "قيادة فريق العمل والإشراف (Team Supervision)", category: "مهارات قياسية", forms: ["اشراف", "مشرف", "قياده فريق", "توجيه المناديب", "team leader", "supervision", "supervisor"] }
+        ];
+
+        // ==========================================
+        // 2. قوالب التجربة الجاهزة (Presets)
+        // ==========================================
+        const PRESETS = {
+            sales: {
+                resume: `أحمد محمود علي
+القاهرة، مصر | المبيعات والتوزيع
+خبرة 4 سنوات كمندوب مبيعات كاش فان (Cash Van) في شركات المواد الغذائية.
+المهام والخبرات:
+- زيارة محلات التجزئة والجملة يومياً وفق خط سير محدد.
+- بيع المنتجات نقداً ومتابعة التحصيل من العملاء.
+- العمل على تحقيق التارجت الشهري المطلوب من الإدارة.
+- التعامل مع شكاوى التجار ومتابعة المرتجعات.
+المهارات: اللباقة، الإقناع، رخصة قيادة سارية.`,
+                job: `مطلوب فوراً لشركة سلع استهلاكية كبرى (FMCG) مناديب مبيعات كاش فان وبري سيلز (Cash Van & Pre-Sales):
+الشروط والمهام المطلوبة:
+1. خبرة لا تقل عن 3 سنوات في مبيعات التجزئة والجملة (Retail & Wholesale) وقطاع السلاسل التجارية (Modern Trade).
+2. القدرة العالية على فتح عملاء جدد (Cold Calling) وزيادة التوزيع العددي والوزني (Numeric Distribution).
+3. الالتزام الكامل بخطوط السير (Routing / Journey Plan) وتحقيق المستهدف البيعي (Sales Target) ومؤشرات الأداء (KPIs).
+4. متابعة التحصيل النقدي والآجل (Collection) وتطبيق سياسة FIFO وتواريخ الصلاحية عند العملاء.
+5. إجادة إعداد التقارير اليومية واستخدام الإكسل (Excel).`
+            },
+            merchandiser: {
+                resume: `كريم حسن - منسق معارض وممرات (Merchandiser)
+خبرة سنتين في تنسيق البضائع داخل السوبر ماركت والهايبر.
+قمت بترتيب المنتجات على الأرفف ومتابعة نظافة المعروضات.
+التأكد من وجود الأسعار على المنتجات ومتابعة البضاعة في المخزن الفرعي للفرع.
+التعاون مع مشرف الفرع لعمل عروض جيدة.`,
+                job: `تعلن شركة أغذية رائدة عن حاجتها إلى منسق ممرات ومروج بضائع (FMCG Merchandiser) للعمل في السلاسل التجارية الكبرى (Key Accounts / Modern Trade):
+- تطبيق خطة عرض الأرفف المعتمدة (Planogram) وزيادة حصة الرف وواجهات العرض (Share of Shelf / Facing).
+- تطبيق نظام الأول فالأول (FIFO / FEFO) ومراقبة تواريخ الصلاحية (Expiry) بدقة لمنع التوالف.
+- تركيب وتوزيع مواد الدعاية في نقاط البيع (POSM) وتنفيذ العروض الترويجية (Promotions & Gondola Displays).
+- رصد نواقص المخزون (Out of Stock - OOS) وإرسال تقارير يومية عن أسعار المنافسين (Competitor Price Check).`
+            },
+            accountant: {
+                resume: `محمد عادل - محاسب عام
+هاتف: 01012345678 | الإيميل: m.adel@email.com
+بكالوريوس تجارة شعبة محاسبة.
+عملت محاسب في شركة توزيع مواد غذائية لمدة 3 سنوات.
+- مراجعة فواتير المبيعات اليومية مع المناديب واستلام النقدية.
+- تسجيل القيود اليومية على برنامج الإكسل (Excel) ومتابعة المصروفات.
+- عمل جرد للمخزن كل شهر ومطابقة الأرصدة.`,
+                job: `مطلوب محاسب فروع ومبيعات (Sales & Branch Accountant) لشركة FMCG:
+المهام والشروط:
+- متابعة حسابات العملاء وأعمار الديون (Accounts Receivable & Aging Report) ومطابقة أرصدة المناديب.
+- تسوية العهد النقدية والصندوق (Petty Cash & Cash Clearance) وإعداد مذكرات التسوية البنكية (Bank Reconciliation).
+- التعامل مع منظومة الفاتورة الإلكترونية وضريبة القيمة المضافه (E-Invoice & VAT).
+- الرقابة على المخزون والجرد الدوري (Stocktaking) ومحاسبة التكاليف (Cost Accounting).
+- يشترط إجادة العمل على أنظمة ERP مثل (SAP أو Odoo) والإكسل المتقدم (Pivot Table & VLOOKUP).`
+            },
+            quality: {
+                resume: `سارة إبراهيم - أخصائية جودة أغذية
+بكالوريوس علوم قسم كيمياء وميكروبيولوجي.
+خبرة 3 سنوات في مصنع صناعات غذائية.
+- سحب عينات من خطوط الإنتاج وفحص المنتج النهائي.
+- التأكد من التزام العمال بالنظافة الشخصية واشتراطات سلامة الغذاء.
+- متابعة درجات حرارة ثلاجات الحفظ وكتابة التقارير اليومية.`,
+                job: `مطلوب أخصائي مراقبة وتوكيد جودة (QC / QA Specialist) لمصنع أغذية ومشروبات:
+- تطبيق ومتابعة نظام تحليل المخاطر ونقاط التحكم الحرجة (HACCP) ومواصفة الأيزو (ISO 22000 & ISO 9001).
+- الإشراف على ممارسات التصنيع الجيد (GMP & GHP) وسلامة الغذاء (Food Safety).
+- فحص الخامات ومواد التعبئة عند الاستلام وفحص المنتج النهائي (Raw Material & QC Inspection).
+- مراقبة سلسلة التبريد (Cold Chain) وتطبيق معايير الصلاحية (FIFO / FEFO).
+- فتح تقارير عدم المطابقة وتطبيق الإجراءات التصحيحية والوقائية (Non-Conformance & CAPA).`
+            },
+            warehouse: {
+                resume: `محمود سعيد - أمين ومشرف مخزن
+خبرة 5 سنوات في مخازن شركات التوزيع والسلع الاستهلاكية.
+- استلام البضائع من المصانع وفحص الكميات وترتيبها في المخزن.
+- تجهيز طلبيات سيارات التوزيع والمناديب يومياً (استلام وصرف).
+- الإشراف على عمال التحميل والتعتيق داخل المخزن.
+- عمل جرد دوري للأصناف والتأكد من عدم وجود عجز.`,
+                job: `مطلوب مشرف مخازن ولوجستيات (Warehouse & Logistics Supervisor) لشركة توزيع كبرى:
+- تطبيق صارم لقاعدة الصرف حسب تاريخ الصلاحية (FIFO / FEFO) لتقليل التوالف والهالك والمرتجعات (Shrinkage & Damages).
+- إدارة عمليات الاستلام والصرف والتحميل (Inbound / Outbound / Dispatch) وتنظيم حركة الأسطول (Fleet & Logistics).
+- إجراء الجرد الدوري والسنوي (Stocktaking & Cycle Count) ومطابقة كارت الصنف.
+- خبرة قوية في العمل على نظام إدارة المستودعات والباركود (WMS & Barcode) وبرامج الـ ERP والإكسل (Excel) ومؤشرات الأداء (KPIs).`
+            }
+        };
+// ==========================================
+        // 3. دوال المساعدة وتطبيع النصوص العربية والإنجليزية
+        // ==========================================
+        function normalizeText(text) {
+            if (!text) return "";
+            return text
+                .toLowerCase()
+                .replace(/[\u064B-\u065F\u0670]/g, '') // إزالة التشكيل
+                .replace(/[أإآ]/g, 'ا')                 // توحيد الألف
+                .replace(/ة/g, 'ه')                    // توحيد التاء المربوطة
+                .replace(/ى/g, 'ي')                    // توحيد الياء
+                .replace(/[^\u0600-\u06FFa-z0-9\s%]/g, ' ') // إبقاء الحروف والأرقام
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        const STOP_WORDS = new Set([
+            "في", "من", "الي", "على", "علي", "عن", "مع", "هذا", "هذه", "ذلك", "التي", "الذي", "الذين", "ان", "كان", "كانت", "يكون", "تكون",
+            "او", "ثم", "بل", "لا", "لم", "لن", "ما", "هو", "هي", "هم", "نحن", "انا", "انت", "كل", "بعض", "غير", "بين", "حول", "خلال",
+            "بعد", "قبل", "عند", "منذ", "حتي", "لكي", "لان", "اذا", "لو", "قد", "لقد", "سوف", "حسب", "وفق", "ضد", "نحو", "لدى", "لدي",
+            "شركه", "شركات", "مطلوب", "العمل", "عمل", "خبره", "سنوات", "سنه", "مجال", "فرصه", "تعلن", "حاجتها", "وظيفه", "شروط", "مهام",
+            "اجاده", "القدره", "فورا", "يفضل", "يشترط", "جدا", "عبر", "داخل", "خارج", "جميع", "كامل", "بشكل", "يوميا", "شهريا",
+            "the", "and", "for", "with", "that", "this", "from", "have", "has", "will", "your", "you", "are", "not", "but", "all", "can", "job", "work", "experience", "years"
+        ]);
+
+        function updateCount(textareaId, badgeId) {
+            const text = document.getElementById(textareaId).value.trim();
+            const words = text ? text.split(/\s+/).length : 0;
+            document.getElementById(badgeId).textContent = `${words} كلمة`;
+        }
+
+        function clearInput(textareaId) {
+            document.getElementById(textareaId).value = '';
+            updateCount(textareaId, textareaId === 'resumeText' ? 'resumeWordCount' : 'jobWordCount');
+        }
+
+        function loadPreset(type) {
+            const preset = PRESETS[type];
+            if (!preset) return;
+            document.getElementById('resumeText').value = preset.resume;
+            document.getElementById('jobText').value = preset.job;
+            updateCount('resumeText', 'resumeWordCount');
+            updateCount('jobText', 'jobWordCount');
+            analyzeATS();
+        }
+
+        // ==========================================
+        // 4. المحرك الرئيسي للفحص والتحليل (ATS Engine)
+        // ==========================================
+        function analyzeATS() {
+            const rawResume = document.getElementById('resumeText').value.trim();
+            const rawJob = document.getElementById('jobText').value.trim();
+
+            if (!rawResume || !rawJob) {
+                alert('⚠️ يرجى لصق كلٍ من نص السيرة الذاتية ونص إعلان الوظيفة أولاً (أو اختر أحد الأمثلة الجاهزة من الأعلى).');
+                return;
+            }
+
+            const normResume = normalizeText(rawResume);
+            const normJob = normalizeText(rawJob);
+
+            // أ) فحص مصطلحات قاموس الـ FMCG
+            const matchedSkills = [];
+            const missingSkills = [];
+            const categoryCount = {};
+
+            FMCG_DICTIONARY.forEach(item => {
+                const inJob = item.forms.some(f => normJob.includes(normalizeText(f)));
+                if (inJob) {
+                    categoryCount[item.category] = (categoryCount[item.category] || 0) + 1;
+                    const inResume = item.forms.some(f => normResume.includes(normalizeText(f)));
+                    if (inResume) {
+                        matchedSkills.push({ name: item.canonical, type: 'fmcg' });
+                    } else {
+                        missingSkills.push({ name: item.canonical, type: 'fmcg' });
+                    }
+                }
+            });
+
+            // ب) استخراج الكلمات السياقية المهمة من إعلان الوظيفة غير المغطاة بالقاموس
+            const jobTokens = normJob.split(' ').filter(w => w.length > 3 && !STOP_WORDS.has(w) && isNaN(w));
+            const uniqueJobTokens = [...new Set(jobTokens)];
+            const resumeTokenSet = new Set(normResume.split(' '));
+
+            let contextMatched = 0;
+            let contextTotal = 0;
+
+            uniqueJobTokens.forEach(token => {
+                // تجاهل الكلمات التي تم فحصها بالفعل ضمن القاموس
+                const alreadyInDict = FMCG_DICTIONARY.some(d => d.forms.some(f => normalizeText(f).includes(token)));
+                if (!alreadyInDict) {
+                    contextTotal++;
+                    if (resumeTokenSet.has(token) || normResume.includes(token)) {
+                        contextMatched++;
+                        if (matchedSkills.length < 18) {
+                            matchedSkills.push({ name: token, type: 'context' });
+                        }
+                    } else if (missingSkills.length < 18 && token.length >= 4) {
+                        missingSkills.push({ name: token, type: 'context' });
+                    }
+                }
+            });
+
+            // ج) فحص صائد القصور والمشاكل الهيكلية (ATS Deficiency Hunter)
+            const alerts = runDeficiencyHunter(rawResume, normResume);
+
+            // د) حساب النسب المئوية الدقيقة
+            const totalFmcgInJob = matchedSkills.filter(s => s.type === 'fmcg').length + missingSkills.filter(s => s.type === 'fmcg').length;
+            const matchedFmcgCount = matchedSkills.filter(s => s.type === 'fmcg').length;
+
+            const fmcgScore = totalFmcgInJob > 0 ? Math.round((matchedFmcgCount / totalFmcgInJob) * 100) : 75;
+            const contextScore = contextTotal > 0 ? Math.round((contextMatched / contextTotal) * 100) : 70;
+            const formatScore = alerts.score;
+
+            // المعادلة الموزونة: 55% مهارات تخصصية + 25% سياق الإعلان + 20% قوة الصياغة والأرقام
+            const totalScore = Math.min(100, Math.max(5, Math.round((fmcgScore * 0.55) + (contextScore * 0.25) + (formatScore * 0.20))));
+
+            // تحديد التخصص المكتشف
+            let topCategory = "وظائف المبيعات والسلع الاستهلاكية (FMCG)";
+            let maxCatHits = 0;
+            for (const [cat, count] of Object.entries(categoryCount)) {
+                if (count > maxCatHits) {
+                    maxCatHits = count;
+                    topCategory = `التخصص المكتشف: ${cat}`;
+                }
+            }
+
+            // هـ) عرض النتائج وتحديث الواجهة
+            renderResults(totalScore, fmcgScore, contextScore, formatScore, topCategory, matchedSkills, missingSkills, alerts.items, rawResume, rawJob);
+        }
+
+        // ==========================================
+        // 5. صائد القصور والمشاكل (Deficiency Hunter)
+        // ==========================================
+        function runDeficiencyHunter(rawResume, normResume) {
+            const items = [];
+            let score = 100;
+
+            // 1. فحص الأرقام والنسب المئوية (Metrics & KPIs)
+            const hasPercentages = /%|٪|بالمئه|في المائه/.test(rawResume);
+            const numbersMatch = rawResume.match(/\d+/g) || [];
+            if (!hasPercentages && numbersMatch.length < 3) {
+                score -= 30;
+                items.push({
+                    level: 'danger',
+                    icon: 'fa-chart-line',
+                    title: 'قصور خطير: غياب الأرقام والنسب القياسية (Metrics)',
+                    desc: 'سيرتك الذاتية سردية وتخلو من نتائج رقمية! أضف أرقاماً مثل: (تحقيق التارجت بنسبة 108%، تغطية 45 عميل يومياً، تقليل التوالف بنسبة 15%، تحصيل 500 ألف جنيه شهرياً).'
+                });
+            } else if (!hasPercentages) {
+                score -= 15;
+                items.push({
+                    level: 'warning',
+                    icon: 'fa-percent',
+                    title: 'تنبيه: لا توجد نسب مئوية لإبراز حجم الإنجاز (%)',
+                    desc: 'يفضل تحويل مهامك إلى نسب مئوية واضحة (مثل: زيادة المبيعات بنسبة 25% أو دقة جرد 99%).'
+                });
+            } else {
+                items.push({
+                    level: 'success',
+                    icon: 'fa-check-double',
+                    title: 'ممتاز: استخدام جيد للأرقام والنسب القياسية',
+                    desc: 'سيرتك الذاتية تحتوي على مؤشرات رقمية تدعم مصداقية خبراتك أمام مسؤولي التوظيف.'
+                });
+            }
+
+            // 2. فحص المصطلحات الإنجليزية المدمجة (Bilingual ATS Terms)
+            const englishWords = rawResume.match(/[a-zA-Z]{2,}/g) || [];
+            if (englishWords.length < 3) {
+                score -= 20;
+                items.push({
+                    level: 'danger',
+                    icon: 'fa-language',
+                    title: 'قصور في المصطلحات الإنجليزية الفنية (ATS Blind Spot)',
+                    desc: 'حتى لو كان الـ CV بالعربية، يبحث الـ ATS عن اختصارات إنجليزية أساسية مثل (Cash Van, FIFO, Planogram, ERP, Excel, KPIs). اكتب المصطلح الإنجليزي بجانب العربي.'
+                });
+            } else {
+                items.push({
+                    level: 'success',
+                    icon: 'fa-globe',
+                    title: 'توازن لغوي جيد (Bilingual Keywords)',
+                    desc: `تم رصد (${englishWords.length}) مصطلح/كلمة إنجليزية مدمجة مما يرفع توافق الملف مع فلاتر البحث.`
+                });
+            }
+
+            // 3. فحص بيانات الاتصال الأساسية (Contact Info)
+            const hasPhone = /(\+?\d[\d\s-]{8,14}\d)/.test(rawResume);
+            const hasEmail = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(rawResume);
+            if (!hasPhone || !hasEmail) {
+                score -= 15;
+                items.push({
+                    level: 'warning',
+                    icon: 'fa-address-card',
+                    title: 'نقص في بيانات التواصل الأساسية (Contact Info)',
+                    desc: `لم يرصد المحرك ${!hasPhone ? 'رقم هاتف واضح' : ''} ${(!hasPhone && !hasEmail) ? 'أو' : ''} ${!hasEmail ? 'بريد إلكتروني (Email)' : ''}. تأكد من كتابتها كأرقام ونصوص صريحة في أعلى الـ CV.`
+                });
+            }
+
+            // 4. فحص أفعال الإنجاز القوية مقابل الصياغة الضعيفة
+            const actionVerbs = ["حققت", "تحقيق", "طورت", "تطوير", "نجحت", "زياده", "خفض", "تقليل", "اداره", "اشراف", "اسست", "انجاز", "توسيع", "قياده", "تنفيذ", "achieved", "managed", "increased", "developed", "led"];
+            const hasActionVerbs = actionVerbs.some(v => normResume.includes(v));
+            if (!hasActionVerbs) {
+                score -= 15;
+                items.push({
+                    level: 'warning',
+                    icon: 'fa-bolt',
+                    title: 'صياغة تقليدية ضعيفة (Weak Action Verbs)',
+                    desc: 'تجنب عبارات مثل "كنت مسؤولاً عن" أو "قمت بـ"، واستبدلها بأفعال إنجاز قوية مثل: (حققت، طورت، أشرفت على، رفعت نسبة، قللت الهالك).'
+                });
+            }
+
+            // 5. فحص طول السيرة الذاتية
+            const wordCount = rawResume.split(/\s+/).length;
+            if (wordCount < 70) {
+                score -= 20;
+                items.push({
+                    level: 'danger',
+                    icon: 'fa-file-circle-exclamation',
+                    title: 'السيرة الذاتية مختصرة جداً وفقيرة بالتفاصيل',
+                    desc: `عدد الكلمات الحالي (${wordCount} كلمة فقط). هذا العدد غير كافٍ لاجتياز أنظمة الفلترة؛ فصّل مهامك اليومية، المناطق الجغرافية، البرامج المستخدمة، وإنجازاتك.`
+                });
+            }
+
+            return { score: Math.max(10, score), items };
+        }
+
+        // ==========================================
+        // 6. تحديث الواجهة وبناء البرومبت السحري
+        // ==========================================
+        function renderResults(totalScore, fmcgScore, contextScore, formatScore, topCategory, matchedSkills, missingSkills, alerts, rawResume, rawJob) {
+            const resultsSection = document.getElementById('resultsSection');
+            resultsSection.classList.remove('hidden');
+
+            // تحديث الدائرة الإحصائية والألوان
+            const circle = document.getElementById('scoreCircle');
+            const circumference = 2 * Math.PI * 50; // 314.16
+            const offset = circumference - (totalScore / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+
+            const scoreValue = document.getElementById('scoreValue');
+            const scoreBadge = document.getElementById('scoreBadge');
+            const scoreVerdict = document.getElementById('scoreVerdict');
+
+            scoreValue.textContent = `${totalScore}%`;
+            document.getElementById('detectedCategory').textContent = topCategory;
+
+            if (totalScore >= 80) {
+                circle.style.stroke = '#10b981'; // أخضر
+                scoreBadge.className = 'text-xs font-extrabold px-2.5 py-0.5 rounded-full mt-1 bg-emerald-100 text-emerald-800';
+                scoreBadge.textContent = 'ممتاز - جاهز للتقديم';
+                scoreVerdict.textContent = 'توافق ممتاز مع شروط الوظيفة!';
+            } else if (totalScore >= 50) {
+                circle.style.stroke = '#f59e0b'; // أصفر
+                scoreBadge.className = 'text-xs font-extrabold px-2.5 py-0.5 rounded-full mt-1 bg-amber-100 text-amber-800';
+                scoreBadge.textContent = 'متوسط - يحتاج تحسين';
+                scoreVerdict.textContent = 'توافق متوسط: ينقصك بعض الكلمات الحاسمة';
+            } else {
+                circle.style.stroke = '#ef4444'; // أحمر
+                scoreBadge.className = 'text-xs font-extrabold px-2.5 py-0.5 rounded-full mt-1 bg-rose-100 text-rose-800';
+                scoreBadge.textContent = 'ضعيف - معرض للاستبعاد';
+                scoreVerdict.textContent = 'خطر استبعاد آلي: قصور واضح في الكلمات والأرقام';
+            }
+
+            // تحديث الأشرطة الفرعية
+            document.getElementById('fmcgScoreText').textContent = `${fmcgScore}%`;
+            document.getElementById('fmcgScoreBar').style.width = `${fmcgScore}%`;
+            document.getElementById('contextScoreText').textContent = `${contextScore}%`;
+            document.getElementById('contextScoreBar').style.width = `${contextScore}%`;
+            document.getElementById('formatScoreText').textContent = `${formatScore}%`;
+            document.getElementById('formatScoreBar').style.width = `${formatScore}%`;
+
+            // عرض الكلمات المفقودة (Badges باللون الأحمر)
+            const missingContainer = document.getElementById('missingKeywordsContainer');
+            document.getElementById('missingCountBadge').textContent = `${missingSkills.length} مفقودة`;
+            if (missingSkills.length === 0) {
+                missingContainer.innerHTML = `<div class="text-sm font-bold text-emerald-600 bg-emerald-50 p-3 rounded-xl w-full text-center">🎉 رائع! لقد غطيت كافة الكلمات المفتاحية المطلوبة في الإعلان.</div>`;
+            } else {
+                missingContainer.innerHTML = missingSkills.map(s => `
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-rose-50 text-rose-700 border border-rose-200 shadow-sm">
+                        <i class="fa-solid fa-circle-xmark text-rose-500"></i> ${s.name}
+                    </span>
+                `).join('');
+            }
+
+            // عرض الكلمات المتطابقة (Badges باللون الأخضر)
+            const matchedContainer = document.getElementById('matchedKeywordsContainer');
+            document.getElementById('matchedCountBadge').textContent = `${matchedSkills.length} متطابقة`;
+            if (matchedSkills.length === 0) {
+                matchedContainer.innerHTML = `<div class="text-sm font-bold text-rose-600 bg-rose-50 p-3 rounded-xl w-full text-center">⚠️ لم يتم العثور على مهارات مشتركة واضحة!</div>`;
+            } else {
+                matchedContainer.innerHTML = matchedSkills.map(s => `
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-sm">
+                        <i class="fa-solid fa-circle-check text-emerald-500"></i> ${s.name}
+                    </span>
+                `).join('');
+            }
+
+            // عرض تنبيهات صائد القصور
+            const alertsContainer = document.getElementById('alertsContainer');
+            alertsContainer.innerHTML = alerts.map(a => {
+                const styles = {
+                    danger: 'bg-rose-50/70 border-rose-200 text-rose-900 icon-rose-600',
+                    warning: 'bg-amber-50/70 border-amber-200 text-amber-900 icon-amber-600',
+                    success: 'bg-emerald-50/70 border-emerald-200 text-emerald-900 icon-emerald-600'
+                }[a.level];
+                const iconColor = a.level === 'danger' ? 'text-rose-600' : (a.level === 'warning' ? 'text-amber-600' : 'text-emerald-600');
+                return `
+                    <div class="p-4 rounded-xl border ${styles} flex items-start gap-3">
+                        <i class="fa-solid ${a.icon} ${iconColor} text-lg mt-1"></i>
+                        <div>
+                            <h5 class="font-extrabold text-sm">${a.title}</h5>
+                            <p class="text-xs opacity-90 mt-1 leading-relaxed">${a.desc}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // توليد البرومبت السحري الموجه لـ Claude / ChatGPT
+            const missingListText = missingSkills.map(m => m.name).join(' ، ');
+            const promptText = `تقمص دور خبير توظيف ومستشار موارد بشرية متخصص في قطاع السلع الاستهلاكية سريعة الدوران (FMCG & Sales/Logistics ATS Expert).
+أريد منك إعادة صياغة وتحسين سيرتي الذاتية لتتوافق بنسبة تتجاوز 90% مع إعلان الوظيفة المرفق، مع الالتزام الصارم بعدم اختلاق أو كذب أي خبرة غير حقيقية، بل إعادة صياغة خبراتي الفعلية بأسلوب احترافي يدمج المصطلحات الفنية الناقصة.
+
+1️⃣ الكلمات المفتاحية المفقودة التي يجب دمجها بذكاء داخل مهامي وخبراتي (بالعربية مع المصطلح الإنجليزي بين قوسين):
+[ ${missingListText || 'يرجى تعزيز المصطلحات الفنية لقطاع الـ FMCG'} ]
+
+2️⃣ أوجه القصور التي يجب علاجها في الصياغة الجديدة:
+- تحويل المهام السردية إلى إنجازات رقمية قابلة للقياس (Metrics & KPIs) وإضافة عناصر نائبة للأرقام مثل [بنسبة X% أو عدد Y عميل] لأقوم بملئها بأرقامي الحقيقية.
+- البدء بأفعال إنجاز قوية ومباشرة وتنسيق السيرة الذاتية في أقسام قياسية متوافقة مع أنظمة الـ ATS (ملخص احترافي، الخبرات العملية، المهارات الفنية، التعليم).
+
+3️⃣ نص سيرتي الذاتية الحالية:
+"""
+${rawResume}
+"""
+
+4️⃣ نص إعلان الوظيفة المستهدف:
+"""
+${rawJob}
+"""
+
+المطلوب: اكتب لي السيرة الذاتية المعدلة بالكامل جاهزة للنسخ، ثم وضح لي في نقاط سريعة أهم التعديلات التي قمت بها لرفع نسبة قبول الـ ATS.`;
+
+            document.getElementById('magicPromptBox').value = promptText;
+
+            // تمرير سلس إلى قسم النتائج
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function copyMagicPrompt() {
+            const box = document.getElementById('magicPromptBox');
+            box.select();
+            navigator.clipboard.writeText(box.value).then(() => {
+                const btn = document.getElementById('copyPromptBtn');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = `<i class="fa-solid fa-check text-base"></i> <span>تم نسخ البرومبت بنجاح! الصقه الآن في Claude</span>`;
+                btn.classList.replace('bg-amber-400', 'bg-emerald-400');
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.classList.replace('bg-emerald-400', 'bg-amber-400');
+                }, 3000);
+            });
+        }
+    </script>
+</body>
+</html>
